@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class Controller : MonoBehaviour
 {
     public static int CIRCLES_COUNT = 100;
-    public static float MOVE_TO_CIRCLE_MOVE_COEF = 0.02f;
+    public static float MOVE_TO_CIRCLE_MOVE_COEF = 0.1f;
 
     public GameObject circlePrefab;
     private List<GameObject> circles = new List<GameObject>();
@@ -19,6 +19,23 @@ public class Controller : MonoBehaviour
 
     public GameObject scoreDisplay;
     private float score = 0;
+
+    public GameObject commentDisplay;
+
+    private Dictionary<float, string> comments = new Dictionary<float, string>() {
+{ 150, "Spiral" },
+{ 4490, "Cubism" },
+{ 2230, "Octo" },
+{ 2500, "Hepta" },
+{ 3000, "Hexa" },
+{ 3600, "Penta" },
+{ 5950, "Triangles" },
+{ 6740, "Antares" },
+{ 7200, "Not the devil" },
+{ 8090, "Explosion" },
+{ 8920, "Dancing Wings" },
+{ 18000, "End is beginning" },
+    };
 
     private LineRenderer lineRenderer;
     void Start()
@@ -54,8 +71,7 @@ public class Controller : MonoBehaviour
             circles[i].GetComponent<Circle>().shift(bias);
         }
         mousePosition = Input.mousePosition;
-        score += bias;
-        setScore(score);
+        updateScore(bias);
     }
 
     private void handleScroll()
@@ -96,9 +112,24 @@ public class Controller : MonoBehaviour
         }
     }
 
-    private void setScore(float newScore)
+    private void updateScore(float bias)
     {
-        string stringScore = ((int)newScore).ToString();
+        score += bias;
+        string stringScore = ((int)score).ToString();
         scoreDisplay.GetComponent<TextMeshProUGUI>().text = stringScore;
+        setComment();
+    }
+
+    private void setComment()
+    {
+        foreach (var i in comments.Keys)
+        {
+            if (Mathf.Abs(score) > i && Mathf.Abs(score) < i + 100f)
+            {
+                commentDisplay.GetComponent<TextMeshProUGUI>().text = comments[i];
+                return;
+            }
+        }
+        commentDisplay.GetComponent<TextMeshProUGUI>().text = "";
     }
 }
