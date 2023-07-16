@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Circle : MonoBehaviour
 {
-    public static float ORDER_RADIUS = 0.039f;
+    public static float ORDER_RADIUS = 0.022f;
     public static float BIAS_TO_ARC_COEF = 8;
     public static float ORDER_TO_SHIFT_INFLUENCE = 0.02f;
 
@@ -24,7 +24,6 @@ public class Circle : MonoBehaviour
 
     public void shift(float bias)
     {
-        Debug.Log(bias);
         rotation += bias * (BIAS_TO_ARC_COEF + (ORDER_TO_SHIFT_INFLUENCE * order));
         transform.rotation = Quaternion.Euler(Vector3.forward * rotation);
     }

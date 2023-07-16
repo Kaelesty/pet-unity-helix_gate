@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class Controller : MonoBehaviour
 {
     public static int CIRCLES_COUNT = 100;
-    public static float MOVE_TO_CIRCLE_MOVE_COEF = 1f;
+    public static float MOVE_TO_CIRCLE_MOVE_COEF = 0.5f;
 
     public GameObject circlePrefab;
     private List<GameObject> circles = new List<GameObject>();
@@ -32,8 +32,23 @@ public class Controller : MonoBehaviour
     private void Update()
     {
         //handleMouseMoving();
-        handleScroll();
+        //handleScroll();
+        handleSwipe();
         redrawLines();
+    }
+
+    private void handleSwipe()
+    {
+        if (Input.touchCount == 0)
+        {
+            return;
+        }
+        var bias = Input.touches[0].deltaPosition.x * MOVE_TO_CIRCLE_MOVE_COEF;
+        for (int i = 0; i < CIRCLES_COUNT - 1; i++)
+        {
+            circles[i].GetComponent<Circle>().shift(bias);
+        }
+        mousePosition = Input.mousePosition;
     }
 
     private void handleScroll()
