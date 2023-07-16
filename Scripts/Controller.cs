@@ -1,19 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Controller : MonoBehaviour
 {
     public static int CIRCLES_COUNT = 100;
-    public static float MOVE_TO_CIRCLE_MOVE_COEF = 0.5f;
+    public static float MOVE_TO_CIRCLE_MOVE_COEF = 0.02f;
 
     public GameObject circlePrefab;
     private List<GameObject> circles = new List<GameObject>();
 
     private Vector3 mousePosition;
     private Vector2 scrollPosition;
+
+    public GameObject scoreDisplay;
+    private float score = 0;
 
     private LineRenderer lineRenderer;
     void Start()
@@ -49,6 +54,8 @@ public class Controller : MonoBehaviour
             circles[i].GetComponent<Circle>().shift(bias);
         }
         mousePosition = Input.mousePosition;
+        score += bias;
+        setScore(score);
     }
 
     private void handleScroll()
@@ -87,5 +94,11 @@ public class Controller : MonoBehaviour
         {
             lineRenderer.SetPosition(i, circles[i].transform.Find("Sprite").position);
         }
+    }
+
+    private void setScore(float newScore)
+    {
+        string stringScore = ((int)newScore).ToString();
+        scoreDisplay.GetComponent<TextMeshProUGUI>().text = stringScore;
     }
 }
